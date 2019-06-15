@@ -64,6 +64,7 @@ private:
 
     QVector<FrameRange> m_ranges;
     quint8 m_size = 0;
+    void computeSize();
 
     QBitArray bytesToBits(const QByteArray &bytes) const;
     QByteArray bitsToBytes(const QBitArray &bits) const;

@@ -60,8 +60,8 @@ private:
     Ui::MainWindow *ui;
     void readCANConfig(const QString &path);
 
-    bool setupCAN(const QString &deviceName, QCanBusDevice::Filter filter);
-    QCanBusDevice *m_virtDevice0 = nullptr;
+    bool setupCAN(const QString &deviceName, const QString &plugin, QCanBusDevice::Filter filter);
+    QCanBusDevice *m_device = nullptr;
     QVector<CanObject> m_canObjects;
     QVector<CanObjectWidget*> m_canWidgets;
 

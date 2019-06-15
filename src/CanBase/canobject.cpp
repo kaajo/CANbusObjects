@@ -36,31 +36,27 @@ CANObjects::CanObject::CanObject(const QString name, const QMetaType::Type type,
   , m_maxVal(maxVal)
   , m_ranges(ranges)
 {
-    m_size = std::accumulate(ranges.begin(),ranges.end(),static_cast<quint8>(0u),
-                             [](quint8 sum,const FrameRange &val)
-    {return sum + val.endBit.value() - val.startBit.value() + static_cast<quint8>(1u);});
+    computeSize();
 }
 
 CANObjects::CanObject::CanObject(const QVariantMap &map)
 {
     m_name = map["name"].toString();
 
-    QVariant::Type type = QVariant::nameToType(map["type"].toString().toStdString().c_str());
+    const QVariant::Type type = QVariant::nameToType(map["type"].toString().toStdString().c_str());
     m_type = static_cast<QMetaType::Type>(type);
 
     m_minVal = map["minval"];
     m_maxVal = map["maxval"];
 
-    QVariantList ranges = map["ranges"].toList();
+    const QVariantList ranges = map["ranges"].toList();
 
     for (const QVariant &range : ranges)
     {
         m_ranges.push_back(FrameRange(range.toMap()));
     }
 
-    m_size = std::accumulate(m_ranges.begin(),m_ranges.end(),static_cast<quint8>(0u),
-                             [](quint8 sum, FrameRange val)
-    {return sum + val.endBit.value() - val.startBit.value() + static_cast<quint8>(1u);});
+    computeSize();
 }
 
 quint32 CANObjects::CanObject::getFilterMask() const
@@ -225,6 +221,13 @@ QString CANObjects::CanObject::getName() const
 QMetaType::Type CANObjects::CanObject::getType() const
 {
     return m_type;
+}
+
+void CANObjects::CanObject::computeSize()
+{
+    m_size = std::accumulate(m_ranges.begin(),m_ranges.end(),static_cast<quint8>(0u),
+                             [](quint8 sum,const FrameRange &val)
+    {return sum + val.endBit.value() - val.startBit.value() + static_cast<quint8>(1u);});
 }
 
 QBitArray CANObjects::CanObject::bytesToBits(const QByteArray &bytes) const

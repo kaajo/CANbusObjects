@@ -46,12 +46,12 @@ CANObjects::MainWindow::~MainWindow()
 {
     delete ui;
 
-    if (m_virtDevice0->state() == QCanBusDevice::CanBusDeviceState::ConnectedState)
+    if (m_device->state() == QCanBusDevice::CanBusDeviceState::ConnectedState)
     {
-        m_virtDevice0->disconnectDevice();
+        m_device->disconnectDevice();
     }
 
-    m_virtDevice0->deleteLater();
+    m_device->deleteLater();
 }
 
 void CANObjects::MainWindow::onErrorOccurred(QCanBusDevice::CanBusError error)
@@ -63,8 +63,8 @@ void CANObjects::MainWindow::onFramesReceived()
 {
     QHash<quint32,QCanBusFrame> receivedFrames;
 
-    while (m_virtDevice0->framesAvailable()) {
-        const QCanBusFrame frame = m_virtDevice0->readFrame();
+    while (m_device->framesAvailable()) {
+        const QCanBusFrame frame = m_device->readFrame();
 
         receivedFrames[frame.frameId()] = frame;
     }
@@ -107,11 +107,11 @@ void CANObjects::MainWindow::onSendTimer()
 
     for (const QCanBusFrame &frame : outputFrames)
     {
-        m_virtDevice0->writeFrame(frame);
+        m_device->writeFrame(frame);
     }
 }
 
-bool CANObjects::MainWindow::setupCAN(const QString &deviceName,QCanBusDevice::Filter filter)
+bool CANObjects::MainWindow::setupCAN(const QString &deviceName, const QString &plugin, QCanBusDevice::Filter filter)
 {
     QString errorString;
 
@@ -133,36 +133,33 @@ bool CANObjects::MainWindow::setupCAN(const QString &deviceName,QCanBusDevice::F
 
     auto deviceIt = std::find_if(devices.begin(),devices.end(),[deviceName](const QCanBusDeviceInfo  &info){return info.name() == deviceName;});
 
-    if (deviceIt != devices.end())
-    {
-        qDebug() << "connecting to: " << deviceName;
-
-        m_virtDevice0 = QCanBus::instance()->createDevice(QStringLiteral("socketcan"), deviceName, &errorString);
-
-        if (!m_virtDevice0)
-        {
-            qDebug() << "could not create device:" << errorString;
-            return false;
-        }
-
-        connect(m_virtDevice0, &QCanBusDevice::errorOccurred, this, &MainWindow::onErrorOccurred);
-        connect(m_virtDevice0, &QCanBusDevice::framesReceived, this, &MainWindow::onFramesReceived);
-        connect(m_virtDevice0, &QCanBusDevice::framesWritten, this, &MainWindow::onFramesWritten);
-        connect(m_virtDevice0, &QCanBusDevice::stateChanged, this, &MainWindow::onStateChanged);
-
-        QList<QCanBusDevice::Filter> filterList = {filter};
-
-        m_virtDevice0->setConfigurationParameter(QCanBusDevice::RawFilterKey, QVariant::fromValue(filterList));
-
-        if (!m_virtDevice0->connectDevice())
-        {
-            qDebug() << "could not connect to device:" << deviceName;
-            return false;
-        }
+    if (deviceIt == devices.end()) {
+         qDebug() << "device" << deviceName << "not available, try running script scripts/host/initVCAN.sh";
+         return false;
     }
-    else
+
+    qDebug() << "connecting to: " << deviceName;
+
+    m_device = QCanBus::instance()->createDevice(plugin, deviceName, &errorString);
+
+    if (!m_device)
     {
-        qDebug() << "device" << deviceName << "not available, try running script scripts/host/initVCAN.sh";
+        qDebug() << "could not create device:" << errorString;
+        return false;
+    }
+
+    connect(m_device, &QCanBusDevice::errorOccurred, this, &MainWindow::onErrorOccurred);
+    connect(m_device, &QCanBusDevice::framesReceived, this, &MainWindow::onFramesReceived);
+    connect(m_device, &QCanBusDevice::framesWritten, this, &MainWindow::onFramesWritten);
+    connect(m_device, &QCanBusDevice::stateChanged, this, &MainWindow::onStateChanged);
+
+    QList<QCanBusDevice::Filter> filterList = {filter};
+
+    m_device->setConfigurationParameter(QCanBusDevice::RawFilterKey, QVariant::fromValue(filterList));
+
+    if (!m_device->connectDevice())
+    {
+        qDebug() << "could not connect to device:" << deviceName;
         return false;
     }
 
@@ -202,7 +199,7 @@ void CANObjects::MainWindow::on_actionOpen_triggered()
 
 void CANObjects::MainWindow::readCANConfig(const QString& path)
 {
-    Config cfg = ConfigLoader::loadConfig(path);
+    const Config cfg = ConfigLoader::loadConfig(path);
 
     m_canObjects = cfg.canObjects;
 
@@ -213,5 +210,5 @@ void CANObjects::MainWindow::readCANConfig(const QString& path)
         m_canWidgets.push_back(canWidget);
     }
 
-    setupCAN(QStringLiteral("vcan0"),cfg.filter);
+    setupCAN(cfg.canDeviceName,cfg.canDevicePlugin,cfg.filter);
 }

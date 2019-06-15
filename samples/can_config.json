@@ -1,6 +1,6 @@
 {
   "device": {
-    "name" : "can0",
+    "name" : "vcan0",
     "plugin" : "socketcan"
   },
 

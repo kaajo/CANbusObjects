@@ -1,0 +1,241 @@
+{
+  "device": {
+    "name" : "can0",
+    "plugin" : "socketcan"
+  },
+
+  "canobjects": [
+    {
+      "name": "blinker left",
+      "type": "bool",
+      "minval": false,
+      "maxval": true,
+      "ranges": [
+        {
+          "frameid": 1680,
+          "byteid": 3,
+          "startbit": 0,
+          "endbit": 0
+        }
+      ]
+    },
+	{
+      "name": "blinker right",
+      "type": "bool",
+      "minval": false,
+      "maxval": true,
+      "ranges": [
+        {
+          "frameid": 1680,
+          "byteid": 3,
+          "startbit": 1,
+          "endbit": 1
+        }
+      ]
+    },
+	{
+      "name": "headlamps low",
+      "type": "bool",
+      "minval": false,
+      "maxval": true,
+      "ranges": [
+        {
+          "frameid": 1680,
+          "byteid": 4,
+          "startbit": 5,
+          "endbit": 5
+        }
+      ]
+    },
+	{
+      "name": "headlamps high",
+      "type": "bool",
+      "minval": false,
+      "maxval": true,
+      "ranges": [
+        {
+          "frameid": 1680,
+          "byteid": 4,
+          "startbit": 6,
+          "endbit": 6
+        }
+      ]
+    },
+	{
+      "name": "headlamps day",
+      "type": "bool",
+      "minval": false,
+      "maxval": true,
+      "ranges": [
+        {
+          "frameid": 1680,
+          "byteid": 4,
+          "startbit": 7,
+          "endbit": 7
+        }
+      ]
+    },
+	{
+      "name": "battery level",
+      "type": "uint",
+      "minval": 0,
+      "maxval": 255,
+      "ranges": [
+        {
+          "frameid": 1349,
+          "byteid": 3,
+          "startbit": 0,
+          "endbit": 7
+        }
+      ]
+    },
+	{
+      "name": "gas pedal",
+      "type": "uint",
+      "minval": 0,
+      "maxval": 255,
+      "ranges": [
+        {
+          "frameid": 809,
+          "byteid": 6,
+          "startbit": 0,
+          "endbit": 7
+        }
+      ]
+    },
+	{
+      "name": "brake pedal",
+      "type": "uint",
+      "minval": 0,
+      "maxval": 65535,
+      "ranges": [
+        {
+          "frameid": 544,
+          "byteid": 4,
+          "startbit": 0,
+          "endbit": 7
+        },
+		{
+          "frameid": 544,
+          "byteid": 5,
+          "startbit": 0,
+          "endbit": 7
+        }
+      ]
+    },
+	{
+      "name": "steering wheel",
+      "type": "int",
+      "minval": -32768,
+      "maxval": 32767,
+      "ranges": [
+        {
+          "frameid": 688,
+          "byteid": 0,
+          "startbit": 0,
+          "endbit": 7
+        },
+		{
+          "frameid": 688,
+          "byteid": 1,
+          "startbit": 0,
+          "endbit": 7
+        }
+      ]
+    },
+	{
+      "name": "gear shift",
+      "type": "uint",
+      "minval": 0,
+      "maxval": 7,
+      "ranges": [
+        {
+          "frameid": 1087,
+          "byteid": 1,
+          "startbit": 0,
+          "endbit": 2
+        }
+      ]
+    },
+	{
+      "name": "front left wheelspeed",
+      "type": "uint",
+      "minval": 0,
+      "maxval": 4095,
+      "ranges": [
+        {
+          "frameid": 1200,
+          "byteid": 0,
+          "startbit": 0,
+          "endbit": 7
+        },
+		{
+          "frameid": 1200,
+          "byteid": 1,
+          "startbit": 0,
+          "endbit": 3
+        }
+      ]
+    },
+	{
+      "name": "front right wheelspeed",
+      "type": "uint",
+      "minval": 0,
+      "maxval": 4095,
+      "ranges": [
+        {
+          "frameid": 1200,
+          "byteid": 2,
+          "startbit": 0,
+          "endbit": 7
+        },
+		{
+          "frameid": 1200,
+          "byteid": 3,
+          "startbit": 0,
+          "endbit": 3
+        }
+      ]
+    },
+	{
+      "name": "rear left wheelspeed",
+      "type": "uint",
+      "minval": 0,
+      "maxval": 4095,
+      "ranges": [
+        {
+          "frameid": 1200,
+          "byteid": 4,
+          "startbit": 0,
+          "endbit": 7
+        },
+		{
+          "frameid": 1200,
+          "byteid": 5,
+          "startbit": 0,
+          "endbit": 3
+        }
+      ]
+    },
+	{
+      "name": "rear right wheelspeed",
+      "type": "uint",
+      "minval": 0,
+      "maxval": 4095,
+      "ranges": [
+        {
+          "frameid": 1200,
+          "byteid": 6,
+          "startbit": 0,
+          "endbit": 7
+        },
+		{
+          "frameid": 1200,
+          "byteid": 7,
+          "startbit": 0,
+          "endbit": 3
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "canobjects": [
+    {
+      "name": "steering",
+      "type": "float",
+      "minval": -10.5,
+      "maxval": 10.5,
+      "ranges": [
+        {
+          "frameid": 1,
+          "byteid": 0,
+          "startbit": 0,
+          "endbit": 7
+        },
+        {
+          "frameid": 1,
+          "byteid": 1,
+          "startbit": 0,
+          "endbit": 7
+        },
+        {
+          "frameid": 1,
+          "byteid": 2,
+          "startbit": 0,
+          "endbit": 7
+        },
+        {
+          "frameid": 1,
+          "byteid": 3,
+          "startbit": 0,
+          "endbit": 7
+        }
+      ]
+    },
+    {
+      "name": "brake",
+      "type": "float",
+      "minval": 0,
+      "maxval": 10,
+      "ranges": [
+        {
+          "frameid": 1,
+          "byteid": 4,
+          "startbit": 0,
+          "endbit": 7
+        },
+        {
+          "frameid": 1,
+          "byteid": 5,
+          "startbit": 0,
+          "endbit": 7
+        },
+        {
+          "frameid": 1,
+          "byteid": 6,
+          "startbit": 0,
+          "endbit": 7
+        },
+        {
+          "frameid": 1,
+          "byteid": 7,
+          "startbit": 0,
+          "endbit": 7
+        }
+      ]
+    },
+    {
+      "name": "gas",
+      "type": "float",
+      "minval": 0,
+      "maxval": 1,
+      "ranges": [
+        {
+          "frameid": 2,
+          "byteid": 0,
+          "startbit": 0,
+          "endbit": 7
+        },
+        {
+          "frameid": 2,
+          "byteid": 1,
+          "startbit": 0,
+          "endbit": 7
+        },
+        {
+          "frameid": 2,
+          "byteid": 2,
+          "startbit": 0,
+          "endbit": 7
+        },
+        {
+          "frameid": 2,
+          "byteid": 3,
+          "startbit": 0,
+          "endbit": 7
+        }
+      ]
+    },
+    {
+      "name": "parking mode",
+      "type": "bool",
+      "minval": false,
+      "maxval": true,
+      "ranges": [
+        {
+          "frameid": 2,
+          "byteid": 5,
+          "startbit": 0,
+          "endbit": 0
+        }
+      ]
+    }
+  ]
+}

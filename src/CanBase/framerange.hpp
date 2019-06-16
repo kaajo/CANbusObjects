@@ -32,23 +32,39 @@ template<class T, T min, T max>
 class CANBASESHARED_EXPORT RangeT {
 
 public:
-  RangeT() : m_value(min) {}
-  RangeT(const T& val) : m_value(val) {check(val);}
+    RangeT() : m_value(min) {}
+    RangeT(const T& val) : m_value(val) {check(val);}
 
-  T value() const
-  {
-      return m_value;
-  }
+    inline operator T () const {
+        return m_value;
+    }
+
+    T value() const
+    {
+        return m_value;
+    }
+
+    inline RangeT& operator -= (const RangeT& other) {
+        m_value -= other.m_value;
+        check(m_value);
+        return *this;
+    }
+
+    inline RangeT operator - (const RangeT& other) const {
+        const T val = m_value - other.m_value;
+        check(val);
+        return RangeT(val);
+    }
 
 private:
-  T m_value;
+    T m_value;
 
-  inline static void check(const T& val) {
-    if ((val > max) || (val < min)) {
-      throw std::out_of_range("The value " + std::to_string(val) + " is out of the range (" +
-                              std::to_string(min) + ", " + std::to_string(max) + ")");
+    inline static void check(const T& val) {
+        if ((val > max) || (val < min)) {
+            throw std::out_of_range("The value " + std::to_string(val) + " is out of the range (" +
+                                    std::to_string(min) + ", " + std::to_string(max) + ")");
+        }
     }
-  }
 
 };
 
@@ -60,7 +76,7 @@ class CANBASESHARED_EXPORT FrameRange
 public:
     FrameRange(){}
     FrameRange(quint32 fID,CANFrameRange bID,BitRange sb,BitRange eb);
-    FrameRange(QVariantMap map);
+    FrameRange(const QVariantMap &map);
 
     quint32 frameID;
     CANFrameRange byteID;

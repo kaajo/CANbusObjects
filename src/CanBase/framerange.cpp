@@ -31,7 +31,7 @@ CANObjects::FrameRange::FrameRange(quint32 fID, CANFrameRange bID, BitRange sb, 
 
 }
 
-CANObjects::FrameRange::FrameRange(QVariantMap map)
+CANObjects::FrameRange::FrameRange(const QVariantMap &map)
 {
     frameID = map["frameid"].toUInt();
     byteID = CANFrameRange(static_cast<quint8>(map["byteid"].toUInt()));

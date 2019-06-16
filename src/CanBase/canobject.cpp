@@ -99,11 +99,11 @@ QVariant CANObjects::CanObject::readData(const QHash<quint32, QCanBusFrame> &inp
 
         int oldSize = allData.size();
 
-        allData.resize(oldSize + (range.endBit.value() - range.startBit.value() + 1));
+        allData.resize(oldSize + ((range.endBit - range.startBit) + 1));
 
-        for (int i = 0; i < range.endBit.value() - range.startBit.value() + 1; ++i)
+        for (int i = 0; i < (range.endBit - range.startBit) + 1; ++i)
         {
-            allData.setBit(oldSize + i,data.at(range.byteID.value()*8 + range.startBit.value() + i));
+            allData.setBit(oldSize + i,data.at(range.byteID.value()*8 + range.startBit + i));
         }
     }
 
@@ -170,7 +170,7 @@ void CANObjects::CanObject::writeData(const QVariant &value, QHash<quint32, QCan
 
         switch (m_type) {
         case QMetaType::Type::Bool:
-            frameData.setBit(range.byteID.value()*8 + range.startBit.value(),value.toBool());
+            frameData.setBit(range.byteID.value()*8 + range.startBit,value.toBool());
             it->setPayload(bitsToBytes(frameData));
             return;
         case QMetaType::Type::Int:
@@ -190,8 +190,8 @@ void CANObjects::CanObject::writeData(const QVariant &value, QHash<quint32, QCan
             break;
         }
         //TODO sign bit INT
-        const uint8_t firstBit = range.byteID.value()*8 + range.startBit.value();
-        const uint8_t lastBit = range.byteID.value()*8 + range.endBit.value();
+        const uint8_t firstBit = range.byteID.value()*8 + range.startBit;
+        const uint8_t lastBit = range.byteID.value()*8 + range.endBit;
 
         for (uint8_t outbit = lastBit +1; outbit > firstBit; --outbit, --databit)
         {
@@ -227,7 +227,7 @@ void CANObjects::CanObject::computeSize()
 {
     m_size = std::accumulate(m_ranges.begin(),m_ranges.end(),static_cast<quint8>(0u),
                              [](quint8 sum,const FrameRange &val)
-    {return sum + val.endBit.value() - val.startBit.value() + static_cast<quint8>(1u);});
+    {return sum + (val.endBit - val.startBit) + static_cast<quint8>(1u);});
 }
 
 QBitArray CANObjects::CanObject::bytesToBits(const QByteArray &bytes) const
